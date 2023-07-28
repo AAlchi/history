@@ -1,15 +1,4 @@
-interface Item {
-  id: number;
-  title: string;
-  desc: string;
-  image: string;
-}
-
-interface Data {
-  featured: Item[];
-}
-
-const data: Data = {
+const data = {
   featured: [
     {
       id: 1,

@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "../styles/globals.css";
 import Home from ".";
 import { useEffect, useState } from "react";
 
