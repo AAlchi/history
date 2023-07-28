@@ -12,6 +12,12 @@ const Header = () => {
         In this website you will be able to learn about your favorite topics in
         history!{" "}
       </h3>
+      <a className="text-sm" href="">
+        Sign up
+      </a>
+      <a className="text-sm" href="">
+        Log in
+      </a>
     </header>
   );
 };
