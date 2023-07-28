@@ -1,29 +1,27 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const SignupHandler = async () => {
     try {
       await axios
-        .post("/api/signup", {
+        .post("/api/signin", {
           username: username,
-          email: email,
           password: password,
         })
         .then((res) => {
-          toast.success("You have successfully signed up");
-          navigate("/signin");
+          toast.success("You are signed in");
+          navigate("/");
+          console.log(res.data);
         });
     } catch (err) {
-      toast.error("Same user exists. Please try again");
+      toast.error("Wrong username or password. Please try again");
     }
   };
   return (
@@ -37,7 +35,7 @@ const Signup = () => {
           className="text-2xl"
         >
           {" "}
-          Sign Up
+          Log In
         </h1>
         <input
           onChange={(e) => setUsername(e.target.value)}
@@ -62,17 +60,7 @@ const Signup = () => {
           }}
           placeholder="Password"
         />
-        <input
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          style={{
-            border: "none",
-            textAlign: "center",
-            borderRadius: "10px",
-            height: "30px",
-          }}
-          placeholder="Email"
-        />
+
         <button
           onClick={SignupHandler}
           style={{
@@ -87,18 +75,18 @@ const Signup = () => {
           Submit
         </button>
         <Link
-          to="/signin"
+          to="/signup"
           style={{
             backgroundColor: "lightGray",
             borderRadius: "10px",
             textAlign: "center",
           }}
         >
-          Already Have an account. Click here to log in.
+          No account? Click here to sign up.
         </Link>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default Signin;

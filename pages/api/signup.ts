@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../prismaClient";
+import bcrypt from "bcrypt";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,7 +23,7 @@ export default async function handler(
       email == null ||
       password == null
     ) {
-      res.status(404).end();
+      res.status(500).end();
     }
 
     const fetchedUser = await prisma.user.findUnique({
@@ -34,14 +35,14 @@ export default async function handler(
     });
 
     if (fetchedUser || fetchedUserTwo) {
-      res.status(404).end();
+      res.status(500).end();
     }
 
     const add = await prisma.user.create({
       data: {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
+        password: bcrypt.hashSync(req.body.password, 16),
         isSubscribed: false,
       },
     });

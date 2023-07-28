@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../prismaClient";
 import bcrypt from "bcrypt";
-import jwt from "json-web-token";
+import jwt from "jsonwebtoken";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +21,7 @@ export default async function handler(
       username == null ||
       password == null
     ) {
-      res.status(404).end();
+      res.status(500).end();
     }
 
     const fetchedUser = await prisma.user.findUnique({
@@ -29,20 +29,25 @@ export default async function handler(
     });
 
     if (fetchedUser) {
-      const compare = await bcrypt.compareSync(password, fetchedUser.password);
+      const compare = await bcrypt.compareSync(
+        req.body.password,
+        fetchedUser.password
+      );
 
       if (compare) {
-        const tokenGen = jwt.sign({
-          userId: fetchedUser.id,
-          username: fetchedUser.username,
-          email: fetchedUser.email,
-          dateCreated: fetchedUser.dateCreated,
-          dateUpdated: fetchedUser.dateUpdated,
-        });
+        const tokenGen = jwt.sign(
+          {
+            userId: fetchedUser.id,
+            username: fetchedUser.username,
+            email: fetchedUser.email,
+          },
+          "t",
+          { expiresIn: "1h" }
+        );
         res.status(200).json(tokenGen);
       }
     } else {
-      res.status(404).end();
+      res.status(500).end();
     }
   } catch (err) {
     res.status(500).end();

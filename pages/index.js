@@ -4,6 +4,7 @@ import Homepage from "./components/Homepage";
 import Header from "./components/Header";
 import Signup from "./components/Signup";
 import { Toaster } from "react-hot-toast";
+import Signin from "./components/Signin";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
       </Routes>
     </BrowserRouter>
   );
