@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Spinner from "./Spinner";
+import zustandStore from "../../store/zustand";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -10,7 +12,11 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
+  const spin = zustandStore((state) => state.spin);
+  const setSpin = zustandStore((state) => state.setSpin);
+
   const SignupHandler = async () => {
+    setSpin(true);
     try {
       await axios
         .post("/api/signup", {
@@ -20,14 +26,17 @@ const Signup = () => {
         })
         .then((res) => {
           toast.success("You have successfully signed up");
+          setSpin(false);
           navigate("/signin");
         });
     } catch (err) {
+      setSpin(false);
       toast.error("Same user exists. Please try again");
     }
   };
   return (
     <div className="flex w-full h-full justify-center">
+      <Spinner />
       <div
         className="flex flex-col gap-4 w-2/5 p-5"
         style={{ backgroundColor: "gray", borderRadius: "20px" }}

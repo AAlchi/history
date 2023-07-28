@@ -1,10 +1,12 @@
 import Image from "next/image";
 import React from "react";
 import data from "../data/data";
+import Spinner from "./Spinner";
 
 const Homepage = () => {
   return (
     <div className="flex flex-col items-center">
+      <Spinner />
       <Image
         alt="image"
         src="/History-banner.jpg"

@@ -2,13 +2,19 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import zustandStore from "../../store/zustand";
+import Spinner from "./Spinner";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const spin = zustandStore((state) => state.spin);
+  const setSpin = zustandStore((state) => state.setSpin);
+
   const SignupHandler = async () => {
+    setSpin(true);
     try {
       await axios
         .post("/api/signin", {
@@ -18,14 +24,17 @@ const Signin = () => {
         .then((res) => {
           toast.success("You are signed in");
           navigate("/");
-          console.log(res.data);
+          setSpin(false);
         });
     } catch (err) {
+      setSpin(false);
+
       toast.error("Wrong username or password. Please try again");
     }
   };
   return (
     <div className="flex w-full h-full justify-center">
+      <Spinner />
       <div
         className="flex flex-col gap-4 w-2/5 p-5"
         style={{ backgroundColor: "gray", borderRadius: "20px" }}
